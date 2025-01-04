@@ -33,6 +33,7 @@ const router = createBrowserRouter([
       { path: "mympsts/:id", element: <AuthorPosts /> },
       { path: "posts/:id/edit", element: <AuthorPosts /> },
       { path: "logout", element: <Logout /> },
+      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);

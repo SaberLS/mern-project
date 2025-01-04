@@ -232,3 +232,17 @@ footer {
   padding: 1rem;
   color: var(--color-gray-900);
 }
+
+/* ================= ErrorPage ================= */
+
+.center {
+  text-align: center;
+  padding-top: 5rem;
+  margin-inline: center;
+  display: block;
+  width: 100%;
+}
+
+.error-page h2 {
+  margin-top: 3rem;
+}
