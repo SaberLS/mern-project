@@ -343,3 +343,64 @@ footer {
 .post-detail p {
   margin-bottom: 0.7rem;
 }
+
+/* ================= Form ================= */
+.register,
+.login,
+.create-post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 90vh;
+  margin: 0;
+}
+
+.form {
+  background-color: var(--color-primary);
+  padding: 2rem;
+  border-radius: var(--radius-1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.form .btn {
+  align-self: center;
+  border: none;
+}
+
+input,
+select,
+textarea {
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-1);
+  resize: none;
+  border: none;
+}
+
+.form__error-message {
+  align-self: stretch;
+  text-align: left;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-size: 0.8rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-1);
+  display: block;
+}
+
+.small__sign {
+  color: var(--color-secondary);
+}
+
+.small__sign::before {
+  content: " ";
+}
+
+.small__sign:hover {
+  color: var(--color-secondary);
+  opacity: 0.8;
+}
