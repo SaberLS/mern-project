@@ -158,11 +158,12 @@ nav {
 
 .nav__container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .nav__logo {
+  justify-self: flex-start;
   border-radius: 20%;
   padding: 0.3rem;
   display: block;
@@ -174,9 +175,13 @@ nav {
 }
 
 .nav__menu {
+  justify-self: flex-end;
   display: flex;
-  align-items: center;
-  gap: 3rem;
+  justify-content: space-between;
+}
+
+.nav__menu a {
+  margin-left: 0.5rem;
 }
 
 .nav__toggle-btn {
@@ -304,4 +309,37 @@ footer {
   aspect-ratio: 1/1;
   border-radius: var(--radius-2);
   overflow: hidden;
+}
+
+/* ================= Post ================= */
+
+.post-detail {
+  width: var(--form-width);
+  background: var(--color-white);
+  margin-inline: auto;
+  padding: 2rem 0;
+}
+
+.post-detail__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.post-detail__buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.post-detail__thumbnail {
+  margin: 1rem 0;
+  height: fit-content;
+  max-height: 30rem;
+  overflow: hidden;
+}
+
+.post-detail p {
+  margin-bottom: 0.7rem;
 }
