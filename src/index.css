@@ -154,6 +154,7 @@ nav {
   left: 0;
   z-index: 1;
   backdrop-filter: blur(20px);
+  transition: var(--transition);
 }
 
 .nav__container {
@@ -258,7 +259,7 @@ footer {
 .posts__container {
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 1rem;
 }
@@ -353,7 +354,7 @@ footer {
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 90vh;
+  min-height: 90vh;
   margin: 0;
 }
 
@@ -565,4 +566,102 @@ textarea {
   justify-content: space-evenly;
   gap: 2rem;
   flex-wrap: wrap;
+}
+
+/* quill */
+.ql-editor {
+  background: var(--color-white);
+  resize: vertical;
+  min-height: 20rem;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  height: auto;
+}
+
+@media screen and (max-width: 800px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .container {
+    width: var(container-width-md0);
+  }
+
+  /* Navbar */
+  nav {
+    background: none;
+    backdrop-filter: none;
+    position: fixed;
+  }
+
+  .nav__container {
+    position: relative;
+  }
+
+  .nav__menu {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav__menu li {
+    width: 100%;
+  }
+
+  .nav__menu li a {
+    display: block;
+    background: var(--color-primary);
+    padding: 0.85rem 2.5rem;
+    box-shadow: -2rem 4rem 4rem rgba(0, 0, 0, 0.25);
+    margin: 0;
+  }
+
+  .nav__toggle-btn {
+    display: inline-block;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .nav__menu li {
+    box-shadow: -2rem 4rem 4rem rgba(0, 0, 0, 0.26);
+    animation: dropDown 500ms ease forwards;
+    opacity: 0;
+    transform: rotateX(90deg);
+    transform-origin: top;
+  }
+
+  @keyframes dropDown {
+    to {
+      opacity: 1;
+      transform: rotateX(0);
+    }
+  }
+  .nav__menu li:nth-child(2) {
+    animation-delay: 300ms;
+  }
+  .nav__menu li:nth-child(3) {
+    animation-delay: 600ms;
+  }
+
+  .nav__menu li:nth-child(4) {
+    animation-delay: 900ms;
+  }
+
+  .post-detail {
+    width: 100%;
+    background: transparent;
+    padding: 0;
+    margin-top: 12vh;
+  }
 }
