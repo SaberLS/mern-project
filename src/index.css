@@ -507,3 +507,62 @@ textarea {
   margin-inline: auto;
   width: var(--form-width);
 }
+
+/* ================= Dashboard ================= */
+
+.dashboard__container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.dashboard__post {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10%;
+  background: var(--color-white);
+  padding: 1.2rem;
+  border-radius: var(--radius-3);
+}
+
+.dashboard__post-info {
+  width: clamp(15rem, 60%, 40rem);
+  display: flex;
+  gap: 10%;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-flow: row wrap;
+}
+
+@media (max-width: 1000px) {
+  /* CSS styles for viewports 1000px and lower */
+  .dashboard__post {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .dashboard__post-info {
+    width: 100%;
+  }
+}
+
+.dashboard__post-info h5 {
+  width: clamp(20ch, 50%, 100ch);
+}
+
+.dashboard__post-thumbnail {
+  width: clamp(8rem, 40%, 30rem);
+  border-radius: var(--radius-1);
+  overflow: hidden;
+}
+
+.dashboard__post-actions {
+  width: clamp(15rem, 30%, 20rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+  flex-wrap: wrap;
+}

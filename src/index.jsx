@@ -9,11 +9,14 @@ import PostDetail from "./pages/PostDetail";
 import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
 import LoginPage from "./pages/LoginPage";
-import Autorhors from "./pages/Authors";
+import Authors from "./pages/Authors";
 import CreatePost from "./pages/CreatePost";
 import CategoryPosts from "./pages/CategoryPosts";
 import AuthorPosts from "./pages/AuthorPosts";
 import Logout from "./pages/Logout";
+import Dashboard from "./pages/Dashboard";
+import DeletePost from "./pages/DeletePost";
+import EditPost from "./pages/EditPost";
 
 const router = createBrowserRouter([
   {
@@ -26,14 +29,14 @@ const router = createBrowserRouter([
       { path: "register", element: <Register /> },
       { path: "profile/:id", element: <UserProfile /> },
       { path: "login", element: <LoginPage /> },
-      { path: "authors", element: <Autorhors /> },
+      { path: "authors", element: <Authors /> },
       { path: "create", element: <CreatePost /> },
       { path: "posts/categories/:category", element: <CategoryPosts /> },
       { path: "posts/users/:id", element: <AuthorPosts /> },
-      { path: "mympsts/:id", element: <AuthorPosts /> },
-      { path: "posts/:id/edit", element: <AuthorPosts /> },
+      { path: "myposts/:id", element: <Dashboard /> },
+      { path: "posts/:id/edit", element: <EditPost /> },
+      { path: "posts/:id/delete", element: <DeletePost /> },
       { path: "logout", element: <Logout /> },
-      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);
