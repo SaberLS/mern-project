@@ -1,5 +1,6 @@
 const express = require( 'express' );
 const cors = require('cors')
+const upload = require('express-fileupload')
 const { connect } = require('mongoose')
 require('dotenv').config()
 
@@ -15,9 +16,11 @@ app.use(
   express.json({extended: true}),
   express.urlencoded({extended: true}),
   cors({ credentials: true, origin: "http://localhost:3000" }),
+  upload(),
 );
 
 // ------------------------- ROUTES --------------------------
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
