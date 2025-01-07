@@ -1,10 +1,11 @@
 const express = require( 'express' );
 const cors = require('cors')
-const {connect} = require('mongoose')
+const { connect } = require('mongoose')
 require('dotenv').config()
 
 const userRoutes = require('./routes/userRoutes.cjs')
 const postRoutes = require('./routes/postRoutes.cjs')
+const {errorMiddleware, notFound} = require('./middleware/errorMiddleware.cjs')
 
 const {MONGO_URI, PORT} = process.env;
 
@@ -17,12 +18,11 @@ app.use(
 );
 
 // ------------------------- ROUTES --------------------------
-app.use(
-  '/api/users', userRoutes
-)
-app.use(
-  '/api/posts', postRoutes
-)
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
+
+app.use(notFound);
+app.use(errorMiddleware);
 
 // ------------------------- Start server --------------------------
 connect(MONGO_URI)

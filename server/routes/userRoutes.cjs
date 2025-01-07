@@ -5,18 +5,18 @@ const {
   getUser,
   changeAvatar,
   editUser,
+  getAuthors,
 } = require("../controllers/userControllers.cjs")
 
 const router = Router();
 
+// -------------- Routes --------------
 router.post('/register',registerUser)
-router.post('/login',loginUser)
-router.get( '/:id', getUser,)
-router.post('/change-avatar',changeAvatar)
-router.post('/edit-user', editUser)
+router.post('/login',loginUser);
+router.post('/change-avatar',changeAvatar);
+router.post('/edit-user', editUser);
 
-router.get('/', (req, res, next) => {
-  res.json("This is the user route")
-});
+router.get( '/:id', getUser);
+router.get('/', getAuthors);
 
 module.exports = router;
