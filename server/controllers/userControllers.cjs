@@ -1,4 +1,4 @@
-const { HttpError } = require("../models/errorModel.cjs"); // Error
+const HttpError = require("../models/errorModel.cjs"); // Error
 const User = require("../models/userModel.cjs"); // MongoDB database model
 
 // npm packages
@@ -8,7 +8,8 @@ const jwt = require('jsonwebtoken') // generate access token
 
 // Build in Node
 const fs = require('fs') // file managment
-const path = require('path') // current path
+const path = require('path'); // current path
+const { isBuffer } = require("util");
 
 const avatarSizeLimit = 500/*kb*/ * 1024
 
@@ -168,7 +169,62 @@ const changeAvatar = async (req, res, next) => {
 // POST : api/users/edit-user
 // PROTECTED
 const editUser = async (req, res, next) => {
-  res.json("Edit user Details")
+  try{
+    const {name, email, currentPassword, newPassword, confirmNewPassword} = req.body;
+    if(!name || !email || !currentPassword || !newPassword || !confirmNewPassword) {
+      return next(new HttpError('Fill in all fields', 422));
+    }
+
+    const lowerEmail = email.toLowerCase();
+    if(!validator.isEmail(lowerEmail)) {
+      return next(new HttpError('Invalid email'));
+    };
+
+    // get user from database
+    const user = await User.findById(req.user.id)
+    if(!user) {
+      return next(new HttpError("User not found", 403))
+    }
+
+    const emailExists = await User.findOne({
+      email: lowerEmail
+    });
+
+    if(emailExists && (emailExists._id != req.user.id)) {
+      return next(new HttpError("Email already exist.", 422))
+    }
+
+    // compare current password to db password
+    const validateUserPassword = await bcrypt.compare(currentPassword, user.password);
+
+    if(!validateUserPassword) {
+      return next(new HttpError('Invalid current password', 422));
+    }
+
+    // compare new passwords
+    if(newPassword !== confirmNewPassword) {
+      return next(new HttpError("Passwords do not match.", 422))
+    }
+
+    if(!validator.isStrongPassword(currentPassword)) {
+      return next(new HttpError("Password is to week", 422))
+    }
+
+    // hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(newPassword, salt)
+
+    // update user info in database
+    const newInfo = await User.findByIdAndUpdate(
+      req.user.id,
+      {name, email: lowerEmail, password: hashedPass },
+      {new: true}
+    );
+
+    res.status(200).json(newInfo);
+  } catch (error) {
+    return next(new HttpError(error))
+  }
 }
 
 // ================= GET AUTHORS

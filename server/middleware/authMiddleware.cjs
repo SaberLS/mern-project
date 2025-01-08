@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken')
-const HttpError = require('../models/errorModel.cjs')
+const jwt = require('jsonwebtoken');
+const HttpError = require('../models/errorModel.cjs');
 
 const authMiddleware = async(req,res, next) => {
   const Authorization = req.headers.Authorization || req.headers.authorization;
@@ -21,9 +21,6 @@ const authMiddleware = async(req,res, next) => {
   } else {
     return next(new HttpError("Unauthorized. No token", 402))
   }
-
-
 }
-
 
 module.exports = authMiddleware;
