@@ -116,7 +116,6 @@ const changeAvatar = async (req, res, next) => {
   try {
     if(!req.files.avatar) throw new Error('Please choose an image.');
 
-
     const {avatar} = req.files;
     const splittedAvatar = avatar.name.split('.'); // avatar.name = <name>.<file extension>
     const [ avatarType ] = splittedAvatar.splice(splittedAvatar.length - 1, 1)
@@ -157,7 +156,7 @@ const changeAvatar = async (req, res, next) => {
         if(!updatedUser) {
           throw new HttpError("Avatar couldn't be changed", 422);
         }
-        res.status(200).json(updatedUser.avatar);
+        res.status(200).json(updatedUser);
       }
     )
   } catch (error) {
