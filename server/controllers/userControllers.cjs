@@ -98,10 +98,11 @@ const loginUser = async (req, res, next) => {
 
 // ================= USER PROFILE
 // GET : api/users/:id
-// PROTECTED
+// UNPROTECTED
 const getUser = async (req, res, next) => {
   const {id} = req.params;
-  const user = await User.findById(id).select('-password')
+
+  const user = await User.findById(id,  '-password')
 
   if(!user) {
     throw new Error('User not found');
