@@ -9,9 +9,8 @@ const jwt = require('jsonwebtoken') // generate access token
 // Build in Node
 const fs = require('fs') // file managment
 const path = require('path'); // current path
-const { isBuffer } = require("util");
 
-const avatarSizeLimit = 500/*kb*/ * 1024
+const avatarSizeLimit = 500_000; // kb
 
 // ================= NEW USER
 // POST : api/users/register
