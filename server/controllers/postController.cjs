@@ -69,28 +69,78 @@ const createPost = async (req,res, next) => {
 // ======================= GET POSTS
 // GET: api/posts
 // UNPROTECTED
-const getPosts = async (req,res, next) => {
-  res.json('GET POSTS')
+const getBy = (Model, filter, sortBy = {updatedAt: -1} ) => {
+  let findFunc
+  let unpackReq
+  if(filter === "id") {
+    findFunc = Model.findById.bind(Model);
+    unpackReq = (req) => req.params[filter]
+  } else {
+    findFunc = Model.find.bind(Model);
+    unpackReq = (req) => filter ? {[filter]: req.params[filter]} : undefined
+  }
+
+  return async (req,res, next) => {
+    try {
+      const data = await findFunc(unpackReq(req)).sort(sortBy)
+
+      res.status(200).json(data)
+    } catch (error) {
+      return next(new HttpError(error))
+    }
+  }
 }
+
+const getPosts = getBy(Post);
 // ======================= Get Single Post
 // GET: api/posts/:id
 // UNPROTECTED
 const getPost = async (req,res, next) => {
-  res.json('Get Single Post')
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+
+    if(!post) {
+      return next(new HttpError("Post not found", 404));
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    return next(new HttpError(error))
+  }
 }
 
 // ======================= GET POSTS BY CATEGORY
 // GET: api/posts/categories/:category
 // UNPROTECTED
 const getCategoryPosts = async (req,res, next) => {
-  res.json('GET POSTS BY CATEGORY')
+  try {
+    const {category} = req.params;
+    const posts = await Post.find({category}).sort({createdAt: -1});
+
+    if(!posts) {
+      return next(new HttpError("Posts Not Found", 404));
+    }
+    res.status(200).json(posts);
+  } catch (error) {
+    return next(new HttpError(error));
+  }
 }
 
 // ======================= GET POSTS BY AUTHOR
 // GET: api/posts/users/:id
 // UNPROTECTED
 const getAuthorPosts = async (req,res, next) => {
-  res.json('GET POSTS BY AUTHOR')
+    try {
+    const {id} = req.params;
+    const posts = await Post.find({creator: id}).sort({createdAt: -1});
+
+    if(!posts) {
+      return next(new HttpError("Posts Not Found", 404));
+    }
+    res.status(200).json(posts);
+  } catch (error) {
+    return next(new HttpError(error));
+  }
 }
 
 // ======================= EDIT POST
