@@ -16,7 +16,7 @@ const router = Router();
 router.get('/:id', getPost);
 router.get('/', getPosts);
 router.get('/categories/:category', getCategoryPosts);
-router.get('/users/:id', getAuthorPosts);
+router.get('/users/:creator', getAuthorPosts);
 
 router.post('/', authMiddleware, createPost);
 
