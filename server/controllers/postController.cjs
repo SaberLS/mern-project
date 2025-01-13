@@ -122,19 +122,24 @@ const editPost = async (req,res, next) => {
 
     const oldPost = await Post.findById(postId);
 
+    if(!oldPost) {
+      return next(new HttpError("Post not found", 404))
+    }
+
     if(userId !== oldPost.creator.toString()){
         return next(new HttpError("Unautorized", 403))
-     }
+    }
 
     const {title, category, description} = req.body;
-    const thumbnail = req.files.thumbnail;
     const toUpdate = {}
 
-    if(title) toUpdate.thumbnail = thumbnail;
+    if(title) toUpdate.title = title;
     if(category) toUpdate.category = category;
     if(description) toUpdate.description = description;
 
-    if(thumbnail) {
+    if(req.thumbnail) {
+      console.log(req.files)
+      const thumbnail = req.files.thumbnail;
       if(thumbnail.size > thumbnailSizeLimit) {
         return next(HttpError(`Thumbnail too big. Should be less than ${thumbnailSizeLimit / 1_000_000}mb`, 402));
       }
@@ -181,7 +186,42 @@ const editPost = async (req,res, next) => {
 // DELETE: api/posts/:id
 // PROTECTED
 const deletePost = async (req,res, next) => {
-  res.json('DELETE POST')
+  try {
+    const postId = req.params.id
+    const userId = req.user.id
+
+    const post = await Post.findById(postId);
+
+    if(!post){
+      return next(new HttpError("Post not found", 404))
+    }
+
+    if(userId !== post.creator.toString()){
+        return next(new HttpError("Unauthorized", 403))
+    }
+
+
+
+    fs.unlink(
+      path.join(__dirname, '..', 'uploads' ,post.thumbnail),
+      async (err) => {
+        if(err) {
+          return next(new HttpError(err))
+        }
+
+        const deleted = await Post.findByIdAndDelete(postId);
+
+        const author = await User.findById(userId);
+
+        const newPostCount = author.posts - 1;
+        await User.findByIdAndUpdate(userId, {posts: newPostCount})
+
+        res.json({deleted, authorPostCount: newPostCount});
+      }
+    );
+  } catch (error) {
+    return next(new HttpError(error))
+  }
 }
 
 module.exports = {
