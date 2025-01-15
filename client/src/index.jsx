@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard";
 import DeletePost from "./pages/DeletePost";
 import EditPost from "./pages/EditPost";
 import UserProvider from "./context/userContext.mjs";
+import PermissionDenied from "./pages/PermissionDenied";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "posts/:id/edit", element: <EditPost /> },
       { path: "posts/:id/delete", element: <DeletePost /> },
       { path: "logout", element: <Logout /> },
+      { path: "permission-denied", element: <PermissionDenied /> },
     ],
   },
 ]);

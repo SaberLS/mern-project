@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { UserContext } from "../context/userContext.mjs";
 import dummyPosts from "../data";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState(dummyPosts);
+  const navigate = useNavigate;
+  const { currentUser } = useContext(UserContext);
+  const authToken = currentUser?.token;
+
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/permission-denied");
+    }
+  });
   return (
     <section className="dashboard">
       {posts.length ? (

@@ -30,6 +30,9 @@ const Header = () => {
                   </Link>
                 </li>
                 <li onClick={closeNavHandler}>
+                  <Link to={`/myposts/${currentUser.id}`}>My posts</Link>
+                </li>
+                <li onClick={closeNavHandler}>
                   <Link to="/create">create</Link>
                 </li>
                 <li onClick={closeNavHandler}>

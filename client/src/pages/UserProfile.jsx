@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import Avatar from "../assets/images/avatar5.jpg";
+import { UserContext } from "../context/userContext.mjs";
 
 const UserProfile = () => {
   const [avatar, setAvatar] = useState(Avatar);
@@ -11,11 +12,19 @@ const UserProfile = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const navigate = useNavigate;
+  const { currentUser } = useContext(UserContext);
+  const authToken = currentUser?.token;
 
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/permission-denied");
+    }
+  });
   return (
     <section className="profile">
       <div className="container profile__container">
-        <Link to={`/myposts/something`} className="btn">
+        <Link to={`/myposts/${currentUser.id}}`} className="btn">
           See my posts
         </Link>
         <div className="profile__details">
@@ -40,7 +49,7 @@ const UserProfile = () => {
               <FaCheck className="ico" />
             </button>
           </div>
-          <h1>Ernest Achiever</h1>
+          <h1>{currentUser.name}</h1>
           {/* form to update user details */}
           <form action="" className="form profile__form">
             <p className="form__error-message">This is an error message</p>

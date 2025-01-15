@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { UserContext } from "../context/userContext.mjs";
 
 const modules = {
   toolbar: [
@@ -41,11 +43,19 @@ const POST_CATEGORIES = [
 ];
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Uncategorized");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("Thumbnail");
+  const { currentUser } = useContext(UserContext);
+  const authToken = currentUser?.token;
 
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/permission-denied");
+    }
+  });
   return (
     <section className="create-post">
       <div className="container">
