@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logoipsum-346.svg";
 import { FiAlignJustify } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
+import { UserContext } from "../context/userContext.mjs";
 
 const Header = () => {
   const [isNavShowing, setIsNavShowing] = useState(window.innerWidth > 800);
+  const { currentUser } = useContext(UserContext);
 
-  const closeNavHandler = () => setIsNavShowing(!isNavShowing);
+  const closeNavHandler = () => {
+    if (window.innerWidth <= 800) {
+      setIsNavShowing(!isNavShowing);
+    }
+  };
   return (
     <nav>
       <div className="container nav__container">
@@ -16,17 +22,32 @@ const Header = () => {
         </Link>
         {isNavShowing && (
           <ul className="nav__menu">
-            <li onClick={closeNavHandler}>
-              <Link to="/profile/something">profile</Link>
-            </li>
-            <li onClick={closeNavHandler}>
-              <Link to="/create">create</Link>
-            </li>
+            {currentUser ? (
+              <>
+                <li onClick={closeNavHandler}>
+                  <Link to={`/profile/${currentUser.id}`}>
+                    {currentUser.name}
+                  </Link>
+                </li>
+                <li onClick={closeNavHandler}>
+                  <Link to="/create">create</Link>
+                </li>
+                <li onClick={closeNavHandler}>
+                  <Link to="/logout">logout</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li onClick={closeNavHandler}>
+                  <Link to="/register">register</Link>
+                </li>
+                <li onClick={closeNavHandler}>
+                  <Link to="/login">login</Link>
+                </li>
+              </>
+            )}
             <li onClick={closeNavHandler}>
               <Link to="/authors">authors</Link>
-            </li>
-            <li onClick={closeNavHandler}>
-              <Link to="/logout">logout</Link>
             </li>
           </ul>
         )}

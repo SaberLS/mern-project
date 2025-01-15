@@ -8,14 +8,12 @@ const userRoutes = require('./routes/userRoutes.cjs')
 const postRoutes = require('./routes/postRoutes.cjs')
 const {errorMiddleware, notFound} = require('./middleware/errorMiddleware.cjs')
 
-const {MONGO_URI, PORT} = process.env;
-
 // create an Express application
 const app = express();
 app.use(
   express.json({extended: true}),
   express.urlencoded({extended: true}),
-  cors({ credentials: true, origin: "http://localhost:3000" }),
+  cors({ credentials: true, origin: `http://localhost:3000` }),
   upload(),
 );
 
@@ -28,10 +26,10 @@ app.use(notFound);
 app.use(errorMiddleware);
 
 // ------------------------- Start server --------------------------
-connect(MONGO_URI)
+connect(process.env.MONGO_URI)
   .then(
     app.listen(
-      PORT,
-      () => console.log(`Server running on port ${PORT}`)
+      process.env.PORT,
+      () => console.log(`Server running on port ${process.env.PORT}`)
     ))
   .catch(console.error)
