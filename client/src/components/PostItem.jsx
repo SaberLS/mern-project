@@ -3,13 +3,27 @@ import PostAuthor from "./PostAuthor";
 import { Link } from "react-router-dom";
 
 export const PostItem = ({
-  post: { id, thumbnail, category, title, desc, authorID },
+  post: {
+    id,
+    thumbnail,
+    category,
+    title,
+    description,
+    creator: authorID,
+    createdAt,
+  },
 }) => {
-  const shortDesc = desc.length > 150 ? desc.substring(0, 150) + "...." : desc;
+  const shortDesc =
+    description.length > 150
+      ? description.substring(0, 150) + "...."
+      : description;
   return (
     <article className="post">
       <div className="post__thumbnail">
-        <img src={thumbnail} alt={title} />
+        <img
+          src={`${process.env.REACT_APP_ASSETS_URL}/uploads/${thumbnail}`}
+          alt={title}
+        />
       </div>
       <div className="post__content">
         <Link to={`/posts/${id}`}>
@@ -18,7 +32,7 @@ export const PostItem = ({
         <p>{shortDesc}</p>
       </div>
       <div className="post__footer">
-        <PostAuthor />
+        <PostAuthor authorID={authorID} createdAt={createdAt} />
         <Link to={`/posts/categories/${category}`} className="btn category">
           {category}
         </Link>

@@ -273,6 +273,9 @@ footer {
   padding-bottom: 2rem;
   transition: var(--transition);
   cursor: default;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .post:hover {
