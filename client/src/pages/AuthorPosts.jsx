@@ -1,14 +1,42 @@
-import React, { useState } from "react";
-import DUMMY_POSTS from "../data";
+import React, { useState, useEffect } from "react";
 import { PostItem } from "../components/PostItem";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/Loader";
+
 const AuthorPosts = () => {
-  const [posts, setPosts] = useState(DUMMY_POSTS);
+  const [posts, setPosts] = useState([]);
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/posts/users/${id}`
+      );
+      console.log(response.data);
+      setPosts(response?.data);
+      console.log(posts);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, [id]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <section className="posts">
-      {posts.length > 0 ? (
+      {posts ? (
         <div className="container posts__container">
           {posts.map((post) => (
-            <PostItem key={post.id} post={post}></PostItem>
+            <PostItem key={post._id} post={post}></PostItem>
           ))}
         </div>
       ) : (
