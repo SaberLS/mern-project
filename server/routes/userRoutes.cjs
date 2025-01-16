@@ -15,8 +15,9 @@ const router = Router();
 // -------------- Routes --------------
 router.post('/register',registerUser)
 router.post('/login',loginUser);
-router.post('/change-avatar', authMiddleware, changeAvatar);
-router.post('/edit-user', authMiddleware, editUser);
+
+router.patch('/change-avatar', authMiddleware, changeAvatar);
+router.patch('/edit-user', authMiddleware, editUser);
 
 router.get( '/:id', getUser);
 router.get('/', getAuthors);

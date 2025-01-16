@@ -174,6 +174,8 @@ const changeAvatar = async (req, res, next) => {
 const editUser = async (req, res, next) => {
   try{
     const {name, email, currentPassword, newPassword, confirmNewPassword} = req.body;
+
+    console.log(name, email, currentPassword, newPassword, confirmNewPassword)
     if(!name || !email || !currentPassword || !newPassword || !confirmNewPassword) {
       return next(new HttpError('Fill in all fields', 422));
     }
