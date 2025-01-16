@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { UserContext } from "../context/userContext.mjs";
+import { UserContext } from "../context/userContext";
+import axios from "axios";
 
 const modules = {
   toolbar: [
@@ -44,10 +45,12 @@ const POST_CATEGORIES = [
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(undefined);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Uncategorized");
   const [description, setDescription] = useState("");
-  const [thumbnail, setThumbnail] = useState("Thumbnail");
+  const [thumbnail, setThumbnail] = useState(undefined);
+
   const { currentUser } = useContext(UserContext);
   const authToken = currentUser?.token;
 
@@ -55,13 +58,37 @@ const CreatePost = () => {
     if (!authToken) {
       navigate("/permission-denied");
     }
-  });
+  }, [currentUser]);
+
+  const createPost = async (event) => {
+    event.preventDefault();
+    const postData = new FormData();
+    postData.set("title", title);
+    postData.set("thumbnail", thumbnail);
+    postData.set("category", category);
+    postData.set("description", description);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/posts`,
+        postData,
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+      if (response.status === 201) {
+        navigate(`/posts/${response.data._id}`);
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
   return (
     <section className="create-post">
       <div className="container">
         <h2>Create Post</h2>
-        <p className="form__eror-message">This is an error message</p>
-        <form className="form create-post__form">
+        {error ? <p className="form__eror-message">{error}</p> : ""}
+        <form onSubmit={createPost} className="form create-post__form">
           <input
             type="text"
             placeholder="Title"

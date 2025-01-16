@@ -17,7 +17,7 @@ import Logout from "./pages/Logout";
 import Dashboard from "./pages/Dashboard";
 import DeletePost from "./pages/DeletePost";
 import EditPost from "./pages/EditPost";
-import UserProvider from "./context/userContext.mjs";
+import UserProvider from "./context/userContext";
 import PermissionDenied from "./pages/PermissionDenied";
 
 const router = createBrowserRouter([

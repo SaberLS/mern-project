@@ -29,7 +29,7 @@ export const PostItem = ({
         <Link to={`/posts/${id}`}>
           <h3>{title}</h3>
         </Link>
-        <p>{shortDesc}</p>
+        <p dangerouslySetInnerHTML={{ __html: shortDesc }}></p>
       </div>
       <div className="post__footer">
         <PostAuthor authorID={authorID} createdAt={createdAt} />

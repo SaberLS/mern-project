@@ -66,7 +66,7 @@ const loginUser = async (req, res, next) => {
     const {email, password} = req.body;
 
     if(!email || !password) {
-      throw new Error('Fiill in all fields');
+      return next(new HttpError('Fiill in all fields'));
     }
     const lowerEmail = email.toLowerCase();
 
@@ -101,6 +101,9 @@ const loginUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   const {id} = req.params;
 
+  if(id.length < 24){
+    return next(new HttpError("Bad ID"));
+  }
   const user = await User.findById(id,  '-password')
 
   if(!user) {

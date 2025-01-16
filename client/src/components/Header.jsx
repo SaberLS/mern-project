@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/logoipsum-346.svg";
 import { FiAlignJustify } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
-import { UserContext } from "../context/userContext.mjs";
+import { UserContext } from "../context/userContext";
 
 const Header = () => {
   const [isNavShowing, setIsNavShowing] = useState(window.innerWidth > 800);

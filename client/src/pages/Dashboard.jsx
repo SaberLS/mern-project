@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { UserContext } from "../context/userContext.mjs";
+import { UserContext } from "../context/userContext";
 import dummyPosts from "../data";
 import { Link, useNavigate } from "react-router-dom";
 import DeletePost from "./DeletePost";
@@ -14,14 +14,15 @@ const Dashboard = () => {
     if (!authToken) {
       navigate("/permission-denied");
     }
-  });
+  }, [currentUser]);
+
   return (
     <section className="dashboard">
       {posts.length ? (
         <div className="container dashboard__container">
           {posts.map((post) => {
             return (
-              <article key={post.id} className="dashboard__post">
+              <article key={post._id} className="dashboard__post">
                 <div className="dashboard__post-info">
                   <div className="dashboard__post-thumbnail">
                     <img src={post.thumbnail} alt="" />
@@ -29,19 +30,14 @@ const Dashboard = () => {
                   <h5>{post.title}</h5>
                 </div>
                 <div className="dashboard__post-actions">
-                  <DeletePost id={post.id} />
+                  <Link to={`/posts/${post._id}`}>View</Link>
                   <Link
-                    to={`/posts/${post.id}/edit`}
+                    to={`/posts/${post._id}/edit`}
                     className="btn sm primary"
                   >
                     Edit
                   </Link>
-                  <Link
-                    to={`/posts/${post.id}/delete`}
-                    className="btn sm danger"
-                  >
-                    Delete
-                  </Link>
+                  <DeletePost id={post._id} />
                 </div>
               </article>
             );

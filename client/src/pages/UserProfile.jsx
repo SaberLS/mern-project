@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
-import Avatar from "../assets/images/avatar5.jpg";
-import { UserContext } from "../context/userContext.mjs";
+import { UserContext } from "../context/userContext";
 
 const UserProfile = () => {
-  const [avatar, setAvatar] = useState(Avatar);
+  const [avatar, setAvatar] = useState(undefined);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");

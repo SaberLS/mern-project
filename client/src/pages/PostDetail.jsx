@@ -3,7 +3,7 @@ import PostAuthor from "../components/PostAuthor";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import DeletePost from "./DeletePost";
-import { UserContext } from "../context/userContext.mjs";
+import { UserContext } from "../context/userContext";
 import Loader from "../components/Loader";
 import axios from "axios";
 
@@ -13,7 +13,6 @@ const PostDetail = () => {
   const [creatorID, setCreatorID] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -22,14 +21,17 @@ const PostDetail = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/posts/${id}`
         );
-        setPost(await response.data);
-        setCreatorID(response.data.creator);
+        console.log(response.data);
+        if (response.status === 200) {
+          setPost(response.data);
+          setCreatorID(response.data.creator);
+        }
       } catch (error) {
         setError(error);
       }
       setIsLoading(false);
     })();
-  }, []);
+  }, [id]);
 
   if (isLoading) {
     return <Loader />;
@@ -40,14 +42,15 @@ const PostDetail = () => {
       {error && <p className="error">{error}</p>}
       {post && (
         <div className="container post-detail__container">
+          {console.log(post)}
           <div className="post-detail__header">
             <PostAuthor authorID={creatorID} createdAt={post.createdAt} />
             {post.creator === currentUser?.id ? (
               <div className="post-detail__buttons">
-                <Link to={`/posts/${post.id}/edit`} className="btn sm primary">
+                <Link to={`/posts/${post._id}/edit`} className="btn sm primary">
                   Edit
                 </Link>
-                <DeletePost postId={id}></DeletePost>
+                <DeletePost postId={post._id}></DeletePost>
               </div>
             ) : (
               ""
@@ -57,7 +60,7 @@ const PostDetail = () => {
           <div className="post-detail__thumbnail">
             <img
               src={
-                post.thumbnail
+                post?.thumbnail
                   ? `${process.env.REACT_APP_ASSETS_URL}/uploads/${post.thumbnail}`
                   : ""
               }

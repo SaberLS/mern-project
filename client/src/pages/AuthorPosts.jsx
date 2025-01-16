@@ -5,7 +5,7 @@ import axios from "axios";
 import Loader from "../components/Loader";
 
 const AuthorPosts = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
 

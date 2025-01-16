@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { UserContext } from "../context/userContext";
+import axios from "axios";
 
 const modules = {
   toolbar: [
@@ -41,22 +44,81 @@ const POST_CATEGORIES = [
 ];
 
 const EditPost = () => {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
+  const [error, setError] = useState(undefined);
   const [category, setCategory] = useState("Uncategorized");
   const [description, setDescription] = useState("");
-  const [thumbnail, setThumbnail] = useState("Thumbnail");
+  const [thumbnail, setThumbnail] = useState();
+  const [creator, setCreator] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const { currentUser } = useContext(UserContext);
+  const authToken = currentUser?.token;
+
+  useEffect(() => {
+    if (!authToken || currentUser.id !== creator) {
+      navigate("/permission-denied");
+    }
+  }, [currentUser, id]);
+
+  // fetch current post
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/posts/${id}`
+        );
+        setCreator(response.data.creator);
+        setTitle(response.data.title);
+        setCategory(response.data.category);
+        setDescription(response.data.description);
+        setThumbnail("");
+      } catch (error) {
+        console.warn(error);
+        setError(error.response.data.message);
+      }
+      setIsLoading(false);
+    })();
+  }, [id]);
+
+  const editPost = async (event) => {
+    event.preventDefault();
+    const postData = new FormData();
+    postData.set("title", title);
+    postData.set("thumbnail", thumbnail);
+    postData.set("category", category);
+    postData.set("description", description);
+    try {
+      const response = await axios.patchForm(
+        `${process.env.REACT_APP_BASE_URL}/posts/${id}`,
+        postData,
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+      if (response.status === 200) {
+        navigate(`/posts/${response.data._id}`);
+      }
+      console.log(response);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
 
   return (
     <section className="create-post">
       <div className="container">
         <h2>Edit Post</h2>
-        <p className="form__eror-message">This is an error message</p>
-        <form className="form create-post__form">
+        {error ? <p className="form__eror-message">{error}</p> : ""}
+        <form onSubmit={editPost} className="form create-post__form">
           <input
             type="text"
             placeholder="Title"
-            name=""
-            id=""
+            name="title"
+            id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
