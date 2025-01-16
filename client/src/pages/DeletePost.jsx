@@ -16,15 +16,21 @@ const DeletePost = ({ postId }) => {
 
   const deletePost = async () => {
     try {
-      const result = await axios.delete(
+      const response = await axios.delete(
         `${process.env.REACT_APP_BASE_URL}/posts/${postId}`,
         {
           withCredentials: true,
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
-      if (location.pathname === `/myposts/${currentUser.id}`) navigate(0);
-      else navigate("/");
+      if (response.status === 200) {
+        // eslint-disable-next-line
+        if (location.pathname === `/myposts/${currentUser.id}`) {
+          navigate(0);
+        } else {
+          navigate("/");
+        }
+      }
     } catch (error) {
       console.error(error);
     }

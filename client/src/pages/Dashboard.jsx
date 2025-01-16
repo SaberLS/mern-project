@@ -1,20 +1,43 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext";
-import dummyPosts from "../data";
 import { Link, useNavigate } from "react-router-dom";
 import DeletePost from "./DeletePost";
+import axios from "axios";
+import Loader from "../components/Loader";
 
 const Dashboard = () => {
-  const [posts, setPosts] = useState(dummyPosts);
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const authToken = currentUser?.token;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!authToken) {
       navigate("/permission-denied");
     }
   }, [currentUser]);
+
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/posts/users/${currentUser.id}`
+      );
+      setPosts(response?.data);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, [currentUser]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <section className="dashboard">
@@ -37,7 +60,7 @@ const Dashboard = () => {
                   >
                     Edit
                   </Link>
-                  <DeletePost id={post._id} />
+                  <DeletePost postId={post._id} />
                 </div>
               </article>
             );
