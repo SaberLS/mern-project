@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const PostItem = ({
   post: {
-    id,
+    _id: id,
     thumbnail,
     category,
     title,

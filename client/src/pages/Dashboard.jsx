@@ -2,10 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext.mjs";
 import dummyPosts from "../data";
 import { Link, useNavigate } from "react-router-dom";
+import DeletePost from "./DeletePost";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState(dummyPosts);
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const authToken = currentUser?.token;
 
@@ -28,9 +29,7 @@ const Dashboard = () => {
                   <h5>{post.title}</h5>
                 </div>
                 <div className="dashboard__post-actions">
-                  <Link to={`/posts/${post.id}`} className="btn sm">
-                    View
-                  </Link>
+                  <DeletePost id={post.id} />
                   <Link
                     to={`/posts/${post.id}/edit`}
                     className="btn sm primary"
