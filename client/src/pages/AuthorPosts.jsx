@@ -15,9 +15,7 @@ const AuthorPosts = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/posts/users/${id}`
       );
-      console.log(response.data);
       setPosts(response?.data);
-      console.log(posts);
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +31,7 @@ const AuthorPosts = () => {
   }
   return (
     <section className="posts">
-      {posts ? (
+      {posts.length ? (
         <div className="container posts__container">
           {posts.map((post) => (
             <PostItem key={post._id} post={post}></PostItem>

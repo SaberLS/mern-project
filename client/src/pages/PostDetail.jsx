@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostAuthor from "../components/PostAuthor";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import Thumbnail from "../assets/images/blog19.jpg";
 import { useContext } from "react";
 import DeletePost from "./DeletePost";
 import { UserContext } from "../context/userContext.mjs";
@@ -10,14 +9,12 @@ import axios from "axios";
 
 const PostDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [creatorID, setCreatorID] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { currentUser } = useContext(UserContext);
-  const { authToken } = currentUser;
 
   useEffect(() => {
     (async () => {
@@ -45,9 +42,9 @@ const PostDetail = () => {
         <div className="container post-detail__container">
           <div className="post-detail__header">
             <PostAuthor authorID={creatorID} createdAt={post.createdAt} />
-            {post.creator === currentUser.id ? (
+            {post.creator === currentUser?.id ? (
               <div className="post-detail__buttons">
-                <Link to={`/posts/werwer/edit`} className="btn sm primary">
+                <Link to={`/posts/${post.id}/edit`} className="btn sm primary">
                   Edit
                 </Link>
                 <DeletePost postId={id}></DeletePost>
@@ -59,8 +56,12 @@ const PostDetail = () => {
           <h1>{post?.title}</h1>
           <div className="post-detail__thumbnail">
             <img
-              src={`${process.env.REACT_APP_ASSETS_URL}/uploads/${post?.thumbnail}`}
-              alt=""
+              src={
+                post.thumbnail
+                  ? `${process.env.REACT_APP_ASSETS_URL}/uploads/${post.thumbnail}`
+                  : ""
+              }
+              alt="thumbnail"
             />
           </div>
           <div dangerouslySetInnerHTML={{ __html: post.description }}></div>

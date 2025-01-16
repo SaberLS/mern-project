@@ -668,3 +668,19 @@ textarea {
     margin-top: 12vh;
   }
 }
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--color-bg);
+}
+
+.loader img {
+  width: 4.5rem;
+  aspect-ratio: 1/1;
+}
