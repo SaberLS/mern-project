@@ -14,8 +14,8 @@ const Footer = () => {
         <Link to="posts/categories/Education">
           <li>Education</li>
         </Link>
-        <Link to="posts/categories/Entertainent">
-          <li>Entertainent</li>
+        <Link to="posts/categories/Entertainment">
+          <li>Entertainment</li>
         </Link>
         <Link to="posts/categories/Art">
           <li>Art</li>
